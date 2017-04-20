@@ -158,11 +158,13 @@ async def on_message(message):
 
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current prep target is:'.format(message))
         msg2 = await client.send_message(discord.Object(id='181004780489932800'), '{}'.format(prep))
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "Please don't forget to vote consolidation, as we don't really need this system. If you need help with voting please contact one of the board")
         client.send_message(msg)
         client.send_message(msg2)
+        client.send_message(msg3)
 
     elif message.content.startswith('!expand'):
-        msg = await client.send_message(message.channel, "{0.author.mention}, are you mental, it's not like we have enough to do".format(message))
+        msg = await client.send_message(message.channel, "{0.author.mention}, we are far too busy fortifying Kalak to expand.".format(message))
         client.send_message(msg)
 
     elif message.content.startswith('!civilwar'):
