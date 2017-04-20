@@ -9,11 +9,14 @@ import feedparser
 import os
 import subprocess
 import urllib
+import pygsheets
+
 
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
 There are a number of utility commands being showcased here.'''
 client = commands.Bot(command_prefix='!', description=description)
+
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -41,7 +44,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-    await client.change_presence(game=discord.Game(name='Donkey Punch'))
+    await client.change_presence(game=discord.Game(name='Primate Discipline'))
 
 
 @client.event
@@ -76,17 +79,9 @@ async def on_message(message):
         msg = await client.send_message(message.channel, '{0.mention} We need you Thumbelina - https://s-media-cache-ak0.pinimg.com/originals/f0/99/fd/f099fdfe64b9a2545f26b8d3c9071eb3.jpg'.format(user))
         client.send_message(message.channel, msg)
 
-    elif message.content.startswith('!meme'):
-        # These code snippets use an open-source library. http://unirest.io/python
-        response = unirest.get("https://giphy.p.mashape.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=<required>",
-                               headers={
-                                   "X-Mashape-Key": "zQ9dIZoCCVmshlCWA42Mut7WNfIOp1OVanqjsnCY72F9N2rYSm",
-                                   "Accept": "application/json"
-                               }
-                               )
-        msg = await client.send_message(message.channel, '{0.mention} We need you Thumbelina - https://s-media-cache-ak0.pinimg.com/originals/f0/99/fd/f099fdfe64b9a2545f26b8d3c9071eb3.jpg'.format(user))
+    elif message.content.startswith('!salt'):
+        msg = await client.send_message(message.channel, 'https://i.imgflip.com/15ckrs.jpg')
         client.send_message(message.channel, msg)
-
 
     elif message.content.startswith('!announce'):
         line = message.content
@@ -134,32 +129,41 @@ async def on_message(message):
         client.send_message(msg2)
 
     elif message.content.startswith('!fort'):
-        fp_fort = open("fort.txt", "r")
-        fortinfo = fp_fort.read().split(':')
-        fp_fort.close()
 
-        large = fortinfo[0]
-        medium = fortinfo[1]
+        gc = pygsheets.authorize(outh_file='client_secret.json', outh_nonlocal=True)
+        sh = gc.open('System Calulator')
+        wks = sh.sheet1
+        fort1 = wks.get_value('A5')
+        fort2 = wks.get_value('A6')
+        fort3 = wks.get_value('A7')
+        fort4 = wks.get_value('A8')
+        fort5 = wks.get_value('C5')
+        fort6 = wks.get_value('C6')
+        fort7 = wks.get_value('C7')
 
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current fort targets are:'.format(message))
-        msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}".format(large))
-        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}".format(medium))
+        msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}, {}, {}, {}".format(fort1, fort2, fort3, fort4))
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fort5, fort6, fort7))
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
 
     elif message.content.startswith('!prep'):
 
-        fp_prep = open("prep.txt", "r")
-        prepinfo = fp_prep.read().split(':')
-        fp_prep.close()
+        gc = pygsheets.authorize(outh_file='client_secret.json', outh_nonlocal=True)
+        sh = gc.open('System Calulator')
+        wks = sh.sheet1
 
-        prep = prepinfo[0]
+        prep = wks.get_value('A13')
 
-        msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current prep targets are:'.format(message))
+        msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current prep target is:'.format(message))
         msg2 = await client.send_message(discord.Object(id='181004780489932800'), '{}'.format(prep))
         client.send_message(msg)
         client.send_message(msg2)
+
+    elif message.content.startswith('!expand'):
+        msg = await client.send_message(message.channel, "{0.author.mention}, are you mental, it's not like we have enough to do".format(message))
+        client.send_message(msg)
 
     elif message.content.startswith('!civilwar'):
 
@@ -177,7 +181,7 @@ async def on_message(message):
         line = message.content
         word, space, rest = line.partition(' ')
         cmd_var = rest
-        command = 'python3.6 /home/shared/trade/tradedangerous/trade.py shipvendor {}'.format(
+        command = '/usr/bin/python3.6 /home/shared/trade/tradedangerous/trade.py shipvendor {}'.format(
             cmd_var)
         for line in run_command(command):
             line = line.decode('UTF-8')
@@ -188,7 +192,7 @@ async def on_message(message):
         line = message.content
         word, space, rest = line.partition(' ')
         cmd_var = rest
-        command = 'python3.6 /home/shared/trade/tradedangerous/trade.py rares {} --ly 50'.format(
+        command = '/usr/bin/python3.6 /home/shared/trade/tradedangerous/trade.py rares {} --ly 50'.format(
             cmd_var)
         for line in run_command(command):
             line = line.decode('UTF-8')
