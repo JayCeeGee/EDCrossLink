@@ -8,6 +8,7 @@ import random
 import feedparser
 import os
 import subprocess
+import urllib
 
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
@@ -40,6 +41,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    await client.change_presence(game=discord.Game(name='Donkey Punch'))
 
 
 @client.event
@@ -73,6 +75,18 @@ async def on_message(message):
         user = discord.User(id=108520493966979072)
         msg = await client.send_message(message.channel, '{0.mention} We need you Thumbelina - https://s-media-cache-ak0.pinimg.com/originals/f0/99/fd/f099fdfe64b9a2545f26b8d3c9071eb3.jpg'.format(user))
         client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!meme'):
+        # These code snippets use an open-source library. http://unirest.io/python
+        response = unirest.get("https://giphy.p.mashape.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=<required>",
+                               headers={
+                                   "X-Mashape-Key": "zQ9dIZoCCVmshlCWA42Mut7WNfIOp1OVanqjsnCY72F9N2rYSm",
+                                   "Accept": "application/json"
+                               }
+                               )
+        msg = await client.send_message(message.channel, '{0.mention} We need you Thumbelina - https://s-media-cache-ak0.pinimg.com/originals/f0/99/fd/f099fdfe64b9a2545f26b8d3c9071eb3.jpg'.format(user))
+        client.send_message(message.channel, msg)
+
 
     elif message.content.startswith('!announce'):
         line = message.content
