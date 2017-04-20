@@ -1,39 +1,192 @@
 import discord
 from discord.ext import commands
+import logging
+from time import gmtime, strftime
+import requests
+import json
+import random
+import feedparser
+import os
+import subprocess
 
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
 There are a number of utility commands being showcased here.'''
-bot = commands.Bot(command_prefix='!', description=description)
+client = commands.Bot(command_prefix='!', description=description)
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(
+    filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(
+    logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 fp_info = open("token.txt", "r")
 token = fp_info.read()
 fp_info.close()
 
 
-@bot.event
+def run_command(command):
+    p = subprocess.Popen(command,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT)
+    return iter(p.stdout.readline, b'')
+
+
+@client.event
 async def on_ready():
     print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
+    print(client.user.name)
+    print(client.user.id)
     print('------')
 
 
-@bot.event
+@client.event
 async def on_message(message):
     # we do not want the bot to reply to itself
-    if message.author == bot.user:
+    if message.author == client.user:
         return
 
-    if message.content.startswith('!ragequit'):
-        msg = '{0.author.mention} has rage quit - Goodbye!! http://giphy.com/gifs/triggered-kRgj0fQLxhVoA'.format(message)
-    await bot.send_message(message.channel, msg)
+    elif message.content.startswith('!help'):
+        print('woop')
+        msg = await client.send_message(message.channel, 'Available commands: fort, prep, expand, galnet, chuck, time')
+        client.send_message(msg)
+
+    elif message.content.startswith('!ragequit'):
+        msg = await client.send_message(message.channel, '{0.author.mention} has rage quit - Goodbye!! http://giphy.com/gifs/triggered-kRgj0fQLxhVoA'.format(message))
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!facepalm'):
+        msg = await client.send_message(message.channel, 'http://imgur.com/a/HAGd7')
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!escalate'):
+        msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/204927799423664137/301083037138157568/15m34n.png')
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!dave'):
+        msg = await client.send_message(message.channel, 'https://cdn.meme.am/cache/instances/folder165/500x/71341165.jpg')
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!thumb'):
+        user = discord.User(id=108520493966979072)
+        msg = await client.send_message(message.channel, '{0.mention} We need you Thumbelina - https://s-media-cache-ak0.pinimg.com/originals/f0/99/fd/f099fdfe64b9a2545f26b8d3c9071eb3.jpg'.format(user))
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!announce'):
+        line = message.content
+        word, space, rest = line.partition(' ')
+        tannoycontent = rest
+        print(tannoycontent)
+        msg = await client.send_message(discord.Object(id='144116783056420875'), tannoycontent)
+        client.send_message(msg)
+
+    elif message.content.startswith('!shout'):
+        line = message.content
+        word, space, rest = line.partition(' ')
+        tannoycontent = rest
+        msg = await client.send_message(discord.Object(id='121698824682078208'), tannoycontent)
+        client.send_message(msg)
+
+    elif message.content.startswith('!explore'):
+        msg = await client.send_message(message.channel, 'Exploration is not a valid play style, your argument is invalid.')
+        client.send_message(msg)
+
+    elif message.content.startswith('!kalak'):
+        msg = await client.send_message(message.channel, 'I may be wrong, but I believe Kalak needs another 10k forts. Thank you please!')
+        client.send_message(msg)
+
+    elif message.content.startswith('!chuck'):
+        link = "http://api.icndb.com/jokes/random"
+        f = requests.get(link)
+
+        j = json.loads(f.text)
+        value = (j['value'])
+        print(value['joke'])
+        msg = await client.send_message(message.channel, value['joke'])
+        client.send_message(msg)
+
+    elif message.content.startswith('!time'):
+        gametime = strftime("%m-%d %H:%M:%S", gmtime())
+        msg = await client.send_message(message.channel, 'The current time is 3303-{}'.format(gametime))
+        client.send_message(msg)
+
+    elif message.content.startswith('!galnet'):
+        feed = feedparser.parse('http://proxy.gonegeeky.com/edproxy/')
+        msg = await client.send_message(message.channel, 'Latest Galnet Story:   {}'.format(feed['entries'][0].title))
+        msg2 = await client.send_message(message.channel, 'Link:   {}'.format(feed['entries'][0].link))
+        client.send_message(msg)
+        client.send_message(msg2)
+
+    elif message.content.startswith('!fort'):
+        fp_fort = open("fort.txt", "r")
+        fortinfo = fp_fort.read().split(':')
+        fp_fort.close()
+
+        large = fortinfo[0]
+        medium = fortinfo[1]
+
+        msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current fort targets are:'.format(message))
+        msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}".format(large))
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}".format(medium))
+        client.send_message(msg)
+        client.send_message(msg2)
+        client.send_message(msg3)
+
+    elif message.content.startswith('!prep'):
+
+        fp_prep = open("prep.txt", "r")
+        prepinfo = fp_prep.read().split(':')
+        fp_prep.close()
+
+        prep = prepinfo[0]
+
+        msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current prep targets are:'.format(message))
+        msg2 = await client.send_message(discord.Object(id='181004780489932800'), '{}'.format(prep))
+        client.send_message(msg)
+        client.send_message(msg2)
+
+    elif message.content.startswith('!civilwar'):
+
+        fp_cwar = open("cw.txt", "r")
+        cwarinfo = fp_cwar.read().split('^')
+        fp_cwar.close()
+
+        msg = await client.send_message(discord.Object(id='138036649694068736'), '{0.author.mention}, the current civil wars are:'.format(message))
+        client.send_message(msg)
+        for cw in cwarinfo:
+            msg = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cw))
+            client.send_message(msg)
+
+    elif message.content.startswith('!ships'):
+        line = message.content
+        word, space, rest = line.partition(' ')
+        cmd_var = rest
+        command = 'python3.6 /home/shared/trade/tradedangerous/trade.py shipvendor {}'.format(
+            cmd_var)
+        for line in run_command(command):
+            line = line.decode('UTF-8')
+            msg = await client.send_message(message.channel, line)
+            client.send_message(msg)
+
+    elif message.content.startswith('!rares'):
+        line = message.content
+        word, space, rest = line.partition(' ')
+        cmd_var = rest
+        command = 'python3.6 /home/shared/trade/tradedangerous/trade.py rares {} --ly 50'.format(
+            cmd_var)
+        for line in run_command(command):
+            line = line.decode('UTF-8')
+            msg =await client.send_message(message.channel, line)
+            client.send_message(msg)
 
 
-@bot.command()
-async def joined(member: discord.Member):
-    """Says when a member joined."""
-    await bot.say('{0.name} joined in {0.joined_at}'.format(member))
+@client.event
+async def on_member_join(member):
+    server = member.server
+    fmt = 'Welcome {0.mention} to {1.name}!'
+    await client.send_message(server, fmt.format(member, server))
 
 
-bot.run(token)
+client.run(token)
