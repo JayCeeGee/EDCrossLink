@@ -4,12 +4,10 @@ import logging
 from time import gmtime, strftime
 import requests
 import json
-import random
 import feedparser
-import os
 import subprocess
-import urllib
 import pygsheets
+import praw
 
 
 description = '''An example bot to showcase the discord.ext.commands extension
@@ -30,6 +28,15 @@ fp_info = open("token.txt", "r")
 token = fp_info.read()
 fp_info.close()
 
+fp_reddit = open("reddit.txt", "r")
+redditcreds = fp_reddit.read().split(',')
+fp_info.close()
+
+red_client_id = redditcreds[0]
+red_client_secret = redditcreds[1]
+red_password = redditcreds[2]
+red_user_agent = redditcreds[3]
+red_username = redditcreds[4]
 
 def run_command(command):
     p = subprocess.Popen(command,
@@ -44,7 +51,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-    await client.change_presence(game=discord.Game(name='Primate Discipline'))
+    await client.change_presence(game=discord.Game(name='with Body Parts'))
 
 
 @client.event
@@ -81,6 +88,10 @@ async def on_message(message):
 
     elif message.content.startswith('!salt'):
         msg = await client.send_message(message.channel, 'https://i.imgflip.com/15ckrs.jpg')
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!chewy'):
+        msg = await client.send_message(message.channel, 'https://s-media-cache-ak0.pinimg.com/736x/18/0d/90/180d9020bcc8444f5c8df3121d1c46fe.jpg')
         client.send_message(message.channel, msg)
 
     elif message.content.startswith('!announce'):
@@ -155,13 +166,16 @@ async def on_message(message):
         wks = sh.sheet1
 
         prep = wks.get_value('A13')
+        prepcs = wks.get_value('C13')
 
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current prep target is:'.format(message))
         msg2 = await client.send_message(discord.Object(id='181004780489932800'), '{}'.format(prep))
-        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "Please don't forget to vote consolidation, as we don't really need this system. If you need help with voting please contact one of the board")
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), 'The nearest Control System to collect prep materials is {}'.format(prepcs))
+        msg4 = await client.send_message(discord.Object(id='181004780489932800'), "Please don't forget to vote consolidation, as we don't really need this system. If you need help with voting please contact one of the board")
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
+        client.send_message(msg4)
 
     elif message.content.startswith('!expand'):
         msg = await client.send_message(message.channel, "{0.author.mention}, we are far too busy fortifying Kalak to expand.".format(message))
@@ -169,15 +183,16 @@ async def on_message(message):
 
     elif message.content.startswith('!civilwar'):
 
-        fp_cwar = open("cw.txt", "r")
-        cwarinfo = fp_cwar.read().split('^')
-        fp_cwar.close()
+        gc = pygsheets.authorize(outh_file='client_secret.json', outh_nonlocal=True)
+        sh = gc.open('LYR war/influence')
+        wks = sh.worksheet_by_title('Result')
 
-        msg = await client.send_message(discord.Object(id='138036649694068736'), '{0.author.mention}, the current civil wars are:'.format(message))
+        cwcell = wks.get_value('A1')
+
+        msg = await client.send_message(discord.Object(id='138036649694068736'), '{0.author.mention},  the current civil wars are:'.format(message))
+        msg2 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell))
         client.send_message(msg)
-        for cw in cwarinfo:
-            msg = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cw))
-            client.send_message(msg)
+        client.send_message(msg2)
 
     elif message.content.startswith('!ships'):
         line = message.content
@@ -198,8 +213,52 @@ async def on_message(message):
             cmd_var)
         for line in run_command(command):
             line = line.decode('UTF-8')
-            msg =await client.send_message(message.channel, line)
+            msg = await client.send_message(message.channel, line)
             client.send_message(msg)
+
+    elif message.content.startswith('!redditpost'):
+
+        reddit = praw.Reddit(client_id=red_client_id,
+                             client_secret=red_client_secret,
+                             password=red_password,
+                             user_agent=red_user_agent,
+                             username=red_username)
+
+        users = [
+            # IDs of the roles for the teams
+            "121807477699248131",
+        ]
+
+        member = message.author.id
+        for u in users:
+            if u == member:
+                line = message.content
+                word, title, rest = line.split('|')
+                print('{}:{}:{}'.format(word, title, rest))
+                reddit.subreddit('EliteSirius').submit(title, selftext=rest)
+        return
+
+    elif message.content.startswith('!redditlink'):
+
+        reddit = praw.Reddit(client_id=red_client_id,
+                             client_secret=red_client_secret,
+                             password=red_password,
+                             user_agent=red_user_agent,
+                             username=red_username)
+
+        users = [
+            # IDs of the roles for the teams
+            "121807477699248131",
+        ]
+
+        member = message.author.id
+        for u in users:
+            if u == member:
+                line = message.content
+                word, title, rest = line.split('|')
+                print('{}:{}:{}'.format(word, title, rest))
+                reddit.subreddit('EliteSirius').submit(title, url=rest)
+        return
 
 
 @client.event
