@@ -10,9 +10,11 @@ import pygsheets
 import praw
 
 
-description = '''An example bot to showcase the discord.ext.commands extension
-module.
-There are a number of utility commands being showcased here.'''
+description = '''Welcome to Sirius Bot Help.
+
+Commands - fort, prep and civilwar are only available to pledges, the result will only appear in the PP channel.
+
+The following commands are available -'''
 client = commands.Bot(command_prefix='!', description=description)
 
 
@@ -38,11 +40,18 @@ red_password = redditcreds[2]
 red_user_agent = redditcreds[3]
 red_username = redditcreds[4]
 
+
 def run_command(command):
     p = subprocess.Popen(command,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT)
     return iter(p.stdout.readline, b'')
+
+
+@client.command()
+async def joined(member : discord.Member):
+    """Says when a member joined."""
+    await client.say('{0.name} joined in {0.joined_at}'.format(member))
 
 
 @client.event
@@ -56,14 +65,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    await client.process_commands(message)
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
-
-    elif message.content.startswith('!help'):
-        print('woop')
-        msg = await client.send_message(message.channel, 'Available commands: fort, prep, expand, galnet, chuck, time')
-        client.send_message(msg)
 
     elif message.content.startswith('!ragequit'):
         msg = await client.send_message(message.channel, '{0.author.mention} has rage quit - Goodbye!! http://giphy.com/gifs/triggered-kRgj0fQLxhVoA'.format(message))
@@ -266,6 +271,10 @@ async def on_member_join(member):
     server = member.server
     fmt = 'Welcome {0.mention} to {1.name}!'
     await client.send_message(server, fmt.format(member, server))
+    msg = "Welcome {}. Please could you let one of the board members (the ones in purple colour) know your pledge status. " \
+          "If you are an LYR Pilot there are additional hidden channels that you won't have access to until you are setup. " \
+          "Again welcome to the channel and please enjoy your time here."
+    await client.send_message(member, msg.format(member))
 
 
 client.run(token)
