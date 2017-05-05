@@ -32,7 +32,7 @@ fp_info.close()
 
 fp_reddit = open("reddit.txt", "r")
 redditcreds = fp_reddit.read().split(',')
-fp_info.close()
+fp_reddit.close()
 
 red_client_id = redditcreds[0]
 red_client_secret = redditcreds[1]
@@ -122,6 +122,10 @@ async def on_message(message):
         msg = await client.send_message(message.channel, 'I may be wrong, but I believe Kalak needs another 10k forts. Thank you please!')
         client.send_message(msg)
 
+    elif message.content.startswith('!consolidate'):
+        msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/121698824682078208/307949790652530698/1n0k4v.jpg')
+        client.send_message(msg)
+
     elif message.content.startswith('!chuck'):
         link = "http://api.icndb.com/jokes/random"
         f = requests.get(link)
@@ -144,7 +148,7 @@ async def on_message(message):
         client.send_message(msg)
         client.send_message(msg2)
 
-    elif message.content.startswith('!fort'):
+    elif message.content.startswith('!updatetracking'):
 
         gc = pygsheets.authorize(outh_file='client_secret.json', outh_nonlocal=True)
         sh = gc.open('System Calulator')
@@ -157,14 +161,10 @@ async def on_message(message):
         fort6 = wks.get_value('C6')
         fort7 = wks.get_value('C7')
 
-        msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current fort targets are:'.format(message))
-        msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}, {}, {}, {}".format(fort1, fort2, fort3, fort4))
-        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fort5, fort6, fort7))
-        client.send_message(msg)
-        client.send_message(msg2)
-        client.send_message(msg3)
-
-    elif message.content.startswith('!prep'):
+        fp_fort = open("fort.txt", "w")
+        fp_fort.truncate()
+        fp_fort.write("{},{},{},{},{},{},{}".format(fort1, fort2, fort3, fort4, fort5, fort6, fort7))
+        fp_fort.close()
 
         gc = pygsheets.authorize(outh_file='client_secret.json', outh_nonlocal=True)
         sh = gc.open('System Calulator')
@@ -173,31 +173,70 @@ async def on_message(message):
         prep = wks.get_value('A13')
         prepcs = wks.get_value('C13')
 
+        fp_prep = open("prep.txt", "w")
+        fp_prep.truncate()
+        fp_prep.write("{},{}".format(prep, prepcs))
+        fp_prep.close()
+
+        msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the tracking commands have been updated.'.format(message))
+        client.send_message(msg)
+
+    elif message.content.startswith('!fort'):
+
+        fp_fort = open("fort.txt", "r")
+        fortfile = fp_fort.read().split(',')
+        fp_fort.close()
+
+        msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current fort targets are:'.format(message))
+        msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}, {}, {}, {}".format(fortfile[0], fortfile[1], fortfile[2], fortfile[3]))
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fortfile[4], fortfile[5], fortfile[6]))
+        client.send_message(msg)
+        client.send_message(msg2)
+        client.send_message(msg3)
+
+    elif message.content.startswith('!prep'):
+
+        fp_prep = open("prep.txt", "r")
+        prepfile = fp_prep.read().split(',')
+        fp_prep.close()
+
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current prep target is:'.format(message))
-        msg2 = await client.send_message(discord.Object(id='181004780489932800'), '{}'.format(prep))
-        msg3 = await client.send_message(discord.Object(id='181004780489932800'), 'The nearest Control System to collect prep materials is {}'.format(prepcs))
+        msg2 = await client.send_message(discord.Object(id='181004780489932800'), '{}'.format(prepfile[0]))
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), 'The nearest Control System to collect prep materials is {}'.format(prepfile[1]))
         msg4 = await client.send_message(discord.Object(id='181004780489932800'), "Please don't forget to vote consolidation, as we don't really need this system. If you need help with voting please contact one of the board")
+        msg5 = await client.send_message(discord.Object(id='181004780489932800'), 'Remember that a vote to nominate a system is an expansion vote and we need consolidation.')
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
         client.send_message(msg4)
+        client.send_message(msg5)
 
     elif message.content.startswith('!expand'):
-        msg = await client.send_message(message.channel, "{0.author.mention}, we are far too busy fortifying Kalak to expand.".format(message))
+        msg = await client.send_message(discord.Object(id='181004780489932800'), "{0.author.mention}, we don't want the current expansion, please do not deliver materials to the system.".format(message))
+        msg2 = await client.send_message(discord.Object(id='181004780489932800'), "Please be aware that if you use your nominations on a prep that means you cannot vote consolidation")
         client.send_message(msg)
+        client.send_message(msg2)
+
+    elif message.content.startswith('!scrap'):
+        msg = await client.send_message(message.channel, "{0.author.mention}, we don't want the current expansion, please do not deliver materials to the system.".format(message))
+        msg2 = await client.send_message(message.channel, "If you would like more details on the SCRAP initiative, please see here - https://redd.it/3gb0p1")
+        client.send_message(msg)
+        client.send_message(msg2)
 
     elif message.content.startswith('!civilwar'):
-
         gc = pygsheets.authorize(outh_file='client_secret.json', outh_nonlocal=True)
         sh = gc.open('LYR war/influence')
         wks = sh.worksheet_by_title('Result')
 
         cwcell = wks.get_value('A1')
+        cwcell2 = wks.get_value('A2')
 
         msg = await client.send_message(discord.Object(id='138036649694068736'), '{0.author.mention},  the current civil wars are:'.format(message))
         msg2 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell))
+        msg3 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell2))
         client.send_message(msg)
         client.send_message(msg2)
+        client.send_message(msg3)
 
     elif message.content.startswith('!ships'):
         line = message.content
