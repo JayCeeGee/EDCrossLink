@@ -189,7 +189,8 @@ async def on_message(message):
 
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current fort targets are:'.format(message))
         msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}, {}, {}, {}".format(fortfile[0], fortfile[1], fortfile[2], fortfile[3]))
-        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fortfile[4], fortfile[5], fortfile[6]))
+        #msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fortfile[4], fortfile[5], fortfile[6]))
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "We are concentrating on large pad this cycle, so there are no small/med pad targets.")
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
