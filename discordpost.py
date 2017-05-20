@@ -8,6 +8,7 @@ import feedparser
 import subprocess
 import pygsheets
 import praw
+import random
 
 
 description = '''Welcome to Sirius Bot Help.
@@ -98,6 +99,11 @@ async def on_message(message):
     elif message.content.startswith('!chewy'):
         msg = await client.send_message(message.channel, 'https://s-media-cache-ak0.pinimg.com/736x/18/0d/90/180d9020bcc8444f5c8df3121d1c46fe.jpg')
         client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!siriusly'):
+        msg = await client.send_message(message.channel, 'https://giphy.com/gifs/cheezburger-rage-13EjnL7RwHmA2Q')
+        client.send_message(message.channel, msg)
+
 
     elif message.content.startswith('!announce'):
         line = message.content
@@ -305,6 +311,33 @@ async def on_message(message):
                 reddit.subreddit('EliteSirius').submit(title, url=rest)
         return
 
+    elif message.author.id == '108520493966979072':
+
+
+        responses = ['Nope, wrong!',
+                    'Yeah, no, wrong',
+                    'You Sir are incorrect',
+                    'Do not listen he is always wrong'
+                    'I do not believe that means what you think it means',
+                    "That's interesting  -- do you mind walking me through your logic?",
+                    "You're so full of it, your eyes are turning brown",
+                    "Perhaps you need to reinterpret your data.",
+                    "Horsepucky!",
+                    "Absolute claptrap",
+                    "You're probably correct within a few orders of magnitude.",
+                    "I do not think you are stupid, I merely think you are WRONG!",
+                    'Well that is a funny way of saying "insert right answer here"',
+                    "I would agree with you, but then we'd both be wrong.",
+                    "Arsen, just stop typing, no one gives a shit",
+                    ]
+
+        response = random.choice(responses)
+        foo = ['1','2','3','4','5']
+        arsen = random.choice(foo)
+        if arsen == '5':
+            msg = await client.send_message(message.channel, response)
+            client.send_message(msg)
+        return
 
 @client.event
 async def on_member_join(member):
