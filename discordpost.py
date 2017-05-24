@@ -237,7 +237,7 @@ async def on_message(message):
 
         cwcell = wks.get_value('A1')
         cwcell2 = wks.get_value('A2')
-        cwcell2 = wks.get_value('A3')
+        cwcell3 = wks.get_value('A3')
 
         msg = await client.send_message(discord.Object(id='138036649694068736'), '{0.author.mention},  the current civil wars are:'.format(message))
         msg2 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell))
