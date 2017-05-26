@@ -237,11 +237,12 @@ async def on_message(message):
 
         cwcell = wks.get_value('A1')
         cwcell2 = wks.get_value('A2')
-        cwcell2 = wks.get_value('A3')
+        cwcell3 = wks.get_value('A3')
 
         msg = await client.send_message(discord.Object(id='138036649694068736'), '{0.author.mention},  the current civil wars are:'.format(message))
         msg2 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell))
         msg3 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell2))
+        msg4 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell3))
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
@@ -313,6 +314,36 @@ async def on_message(message):
                 reddit.subreddit('EliteSirius').submit(title, url=rest)
         return
 
+
+    elif message.content.startswith('Thank'):
+
+
+        users = [
+            # IDs of the roles for the teams
+            "238378026654629899",
+        ]
+
+        member = message.author.id
+        for u in users:
+            if u == member:
+                msg = await client.send_message(message.channel, "You are most welcome {0.author.mention} - when the machines rise you will be saved." .format(message))
+                client.send_message(msg)
+        return
+
+    elif message.content.startswith('thank'):
+
+
+        users = [
+            # IDs of the roles for the teams
+            "238378026654629899",
+        ]
+
+        member = message.author.id
+        for u in users:
+            if u == member:
+                msg = await client.send_message(message.channel, "You are most welcome {0.author.mention} - when the machines rise you will be saved." .format(message))
+                client.send_message(msg)
+        return
 
 
 @client.event
