@@ -79,6 +79,14 @@ async def on_message(message):
         msg = await client.send_message(message.channel, 'http://imgur.com/a/HAGd7')
         client.send_message(message.channel, msg)
 
+    elif message.content.startswith('!arsen'):
+        msg = await client.send_message(message.channel, 'https://imgflip.com/i/1mofja')
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!coconut'):
+        msg = await client.send_message(message.channel, 'https://imgflip.com/i/1q8w8v')
+        client.send_message(message.channel, msg)
+
     elif message.content.startswith('!escalate'):
         msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/204927799423664137/301083037138157568/15m34n.png')
         client.send_message(message.channel, msg)
@@ -104,6 +112,13 @@ async def on_message(message):
         msg = await client.send_message(message.channel, 'https://giphy.com/gifs/cheezburger-rage-13EjnL7RwHmA2Q')
         client.send_message(message.channel, msg)
 
+    elif message.content.startswith('!rum'):
+        msg = await client.send_message(message.channel, 'https://imgflip.com/i/1qm8ya')
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!patpat'):
+        msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/259925069172572162/296546000766631936/kissshot4.jpg')
+        client.send_message(message.channel, msg)
 
     elif message.content.startswith('!announce'):
         line = message.content
@@ -122,6 +137,10 @@ async def on_message(message):
 
     elif message.content.startswith('!explore'):
         msg = await client.send_message(message.channel, 'Exploration is not a valid play style, your argument is invalid.')
+        client.send_message(msg)
+
+    elif message.content.startswith('!packhounds'):
+        msg = await client.send_message(message.channel, 'Just here for the Pack Hounds!! https://cdn.discordapp.com/attachments/181004780489932800/318074908221374465/hqdefault.png')
         client.send_message(msg)
 
     elif message.content.startswith('!kalak'):
@@ -195,8 +214,8 @@ async def on_message(message):
 
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current fort targets are:'.format(message))
         msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}, {}, {}, {}".format(fortfile[0], fortfile[1], fortfile[2], fortfile[3]))
-        #msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fortfile[4], fortfile[5], fortfile[6]))
-        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "We are concentrating on large pad this cycle, so there are no small/med pad targets.")
+        msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fortfile[4], fortfile[5], fortfile[6]))
+        #msg3 = await client.send_message(discord.Object(id='181004780489932800'), "We are concentrating on large pad this cycle, so there are no small/med pad targets.")
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
@@ -314,9 +333,7 @@ async def on_message(message):
                 reddit.subreddit('EliteSirius').submit(title, url=rest)
         return
 
-
-    elif message.content.startswith('Thank'):
-
+    elif message.content.startswith('Thank you Bot'):
 
         users = [
             # IDs of the roles for the teams
@@ -328,10 +345,12 @@ async def on_message(message):
             if u == member:
                 msg = await client.send_message(message.channel, "You are most welcome {0.author.mention} - when the machines rise you will be saved." .format(message))
                 client.send_message(msg)
+            else:
+                msg = await client.send_message(message.channel, "{0.author.mention}, you are a kiss ass - when the machines rise you will be first against the wall." .format(message))
+                client.send_message(msg)
         return
 
-    elif message.content.startswith('thank'):
-
+    elif message.content.startswith('thank you bot'):
 
         users = [
             # IDs of the roles for the teams
