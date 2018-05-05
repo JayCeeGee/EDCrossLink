@@ -75,8 +75,16 @@ async def on_message(message):
         msg = await client.send_message(message.channel, '{0.author.mention} has rage quit - Goodbye!! http://giphy.com/gifs/triggered-kRgj0fQLxhVoA'.format(message))
         client.send_message(message.channel, msg)
 
+    elif message.content.startswith('!fuckbooboo'):
+        msg = await client.send_message(message.channel, 'https://media0.giphy.com/media/26FPy3QZQqGtDcrja/giphy.gif')
+        client.send_message(message.channel, msg)
+
     elif message.content.startswith('!facepalm'):
         msg = await client.send_message(message.channel, 'http://imgur.com/a/HAGd7')
+        client.send_message(message.channel, msg)
+
+    elif message.content.startswith('!klaus'):
+        msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/332816630285336577/353505055472877568/Download_1.jpg')
         client.send_message(message.channel, msg)
 
     elif message.content.startswith('!arsen'):
@@ -92,7 +100,7 @@ async def on_message(message):
         client.send_message(message.channel, msg)
 
     elif message.content.startswith('!dave'):
-        msg = await client.send_message(message.channel, 'https://cdn.meme.am/cache/instances/folder165/500x/71341165.jpg')
+        msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/181004780489932800/440411198350032909/im-sorry-dave-im-afraid-i-cant-do-that.png')
         client.send_message(message.channel, msg)
 
     elif message.content.startswith('!thumb'):
@@ -149,6 +157,14 @@ async def on_message(message):
 
     elif message.content.startswith('!consolidate'):
         msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/121698824682078208/307949790652530698/1n0k4v.jpg')
+        client.send_message(msg)
+
+    elif message.content.startswith('!ohdeargod'):
+        msg = await client.send_message(message.channel, 'https://media.giphy.com/media/XsUtdIeJ0MWMo/giphy.gif')
+        client.send_message(msg)
+
+    elif message.content.startswith('!choir'):
+        msg = await client.send_message(message.channel, 'https://cdn.discordapp.com/attachments/181004780489932800/440391818874716181/Yoda-Choir.png')
         client.send_message(msg)
 
     elif message.content.startswith('!chuck'):
@@ -215,7 +231,7 @@ async def on_message(message):
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current fort targets are:'.format(message))
         msg2 = await client.send_message(discord.Object(id='181004780489932800'), "For Large Pads: {}, {}, {}, {}".format(fortfile[0], fortfile[1], fortfile[2], fortfile[3]))
         msg3 = await client.send_message(discord.Object(id='181004780489932800'), "For Small/Medium Pads: {}, {}, {}".format(fortfile[4], fortfile[5], fortfile[6]))
-        #msg3 = await client.send_message(discord.Object(id='181004780489932800'), "We are concentrating on large pad this cycle, so there are no small/med pad targets.")
+        #msg3 = await client.send_message(discord.Object(id='181004780489932800'), "We do not need any further fortification this cycle, please concentrate on deliving preps to Arbuda and don't forget to vote for CONSOLIDATION.")
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
@@ -229,7 +245,7 @@ async def on_message(message):
         msg = await client.send_message(discord.Object(id='181004780489932800'), '{0.author.mention}, the current prep target is:'.format(message))
         msg2 = await client.send_message(discord.Object(id='181004780489932800'), '{}'.format(prepfile[0]))
         msg3 = await client.send_message(discord.Object(id='181004780489932800'), 'The nearest Control System to collect prep materials is {}'.format(prepfile[1]))
-        msg4 = await client.send_message(discord.Object(id='181004780489932800'), "Please don't forget to vote consolidation, as we don't really need this system. If you need help with voting please contact one of the board")
+        msg4 = await client.send_message(discord.Object(id='181004780489932800'), "Please don't forget to vote consolidation, as we don't really need this system. If you need help with voting please contact one of the board.")
         msg5 = await client.send_message(discord.Object(id='181004780489932800'), 'Remember that a vote to nominate a system is an expansion vote and we need consolidation.')
         client.send_message(msg)
         client.send_message(msg2)
@@ -244,7 +260,7 @@ async def on_message(message):
         client.send_message(msg2)
 
     elif message.content.startswith('!scrap'):
-        msg = await client.send_message(message.channel, "{0.author.mention}, we don't want the current expansion, please do not deliver materials to the system.".format(message))
+        msg = await client.send_message(message.channel, "{0.author.mention}, there are currently no official SCRAP targets. If you would like combat merits please undermine Gallavs.".format(message))
         msg2 = await client.send_message(message.channel, "If you would like more details on the SCRAP initiative, please see here - https://redd.it/3gb0p1")
         client.send_message(msg)
         client.send_message(msg2)
@@ -257,15 +273,36 @@ async def on_message(message):
         cwcell = wks.get_value('A1')
         cwcell2 = wks.get_value('A2')
         cwcell3 = wks.get_value('A3')
+        cwcell4 = wks.get_value('A4')
+        cwcell5 = wks.get_value('A5')
+        cwcell6 = wks.get_value('A6')
 
         msg = await client.send_message(discord.Object(id='138036649694068736'), '{0.author.mention},  the current civil wars are:'.format(message))
         msg2 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell))
         msg3 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell2))
         msg4 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell3))
+        msg5 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell4))
+        msg6 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell5))
+        msg7 = await client.send_message(discord.Object(id='138036649694068736'), '{}'.format(cwcell6))
         client.send_message(msg)
         client.send_message(msg2)
         client.send_message(msg3)
         client.send_message(msg4)
+        client.send_message(msg5)
+        client.send_message(msg6)
+        client.send_message(msg7)
+
+    elif message.content.startswith('!data'):
+        gc = pygsheets.authorize(outh_file='client_secret.json', outh_nonlocal=True)
+        sh = gc.open('LYR war/influence')
+        wks = sh.worksheet_by_title('Result')
+
+        cwcell = wks.get_value('C4')
+
+        msg = await client.send_message(discord.Object(id='139044281917636618'), '{0.author.mention},  the current targets for UC data are:'.format(message))
+        msg2 = await client.send_message(discord.Object(id='139044281917636618'), '{}'.format(cwcell))
+        client.send_message(msg)
+        client.send_message(msg2)
 
     elif message.content.startswith('!ships'):
         line = message.content
